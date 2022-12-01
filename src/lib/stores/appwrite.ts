@@ -1,7 +1,8 @@
-import { Client, Account } from 'appwrite'
+import { Client, Account, Databases } from 'appwrite'
 
 const client = new Client()
 const account = new Account(client)
+const databases = new Databases(client)
 
 const url = {
 	oauth: {
@@ -13,4 +14,4 @@ const url = {
 client.setEndpoint('http://localhost/v1').setProject('638871b363904655d784')
 
 export default client
-export { client, account, url }
+export { client, account, url, databases }
