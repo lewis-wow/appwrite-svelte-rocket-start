@@ -6,6 +6,7 @@ Frontend included:
 
 * tailwind
 * scss
+* css reset
 * typescript
 * routing
 * ready routes
