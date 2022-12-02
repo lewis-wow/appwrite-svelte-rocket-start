@@ -27,10 +27,10 @@ Included:
 
 ```svelte
   <script>
-    import { createCollectionSubscriber } from '$lib/database'
+    import CollectionSubscriber from '$lib/database'
     import Layout from '$lib/components/Layout'
 
-    const subscriber = createCollectionSubscriber('[database-id]', '[collection-id]')
+    const subscriber = new CollectionSubscriber('[database-id]', '[collection-id]')
     // listen changes in database and automatically rerender on change
     // current data = [{ name: 'John', lastName: 'Doe' }, ...]
   </script>
@@ -40,19 +40,32 @@ Included:
   </Layout>
 ```
 
+### Realtime todo app using CollectionSubscriber
+
 ```svelte
-  <script>
-    import { createDocumentSubscriber } from '$lib/database'
-    import Layout from '$lib/components/Layout'
+<script>
+  import CollectionSubscriber from '$lib/database'
+  import Layout from '$lib/components/Layout'
 
-    const subscriber = createDocumentSubscriber('[database-id]', '[collection-id]', '[document-id]')
-    // listen changes in database and automatically rerender on change
-    // current data = { name: 'John', lastName: 'Doe' }
-  </script>
+  const subscriber = new CollectionSubscriber('[database-id]', '[collection-id]')
+  let value = ''
+</script>
 
-  <Layout>
-    {$subscriber?.name ?? ''}
-  </Layout>
+<Layout>
+  <div>
+    <input type="text" bind:value />
+    <button on:click={() => names.add({ name: value })}>Add</button>
+  </div>
+
+  <div>
+    {#each $subscriber as collectionDocument}
+      <div>
+        <p>{collectionDocument.name}</p>
+        <button on:click={() => names.delete(collectionDocument.$id)}>Remove</button>
+      </div>
+    {/each}
+  </div>
+</Layout>
 ```
 
 ## Routing
