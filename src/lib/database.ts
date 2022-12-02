@@ -8,13 +8,37 @@ export const createCollectionSubscriber = (databaseId: string, collectionId: str
 	databases.listDocuments(databaseId, collectionId).then(data => store.set(data.documents))
 
 	client.subscribe(`databases.${databaseId}.collections.${collectionId}.documents`, (response: RealtimeResponseEvent<any>) => {
-		store.update(current => {
-			const index = current.findIndex(item => item.$id === response.payload.$id)
-			if (index === -1) return current
 
-			current[index] = response.payload
-			return current
-		})
+		if (response.events.includes(`databases.${databaseId}.collections.${collectionId}.documents.*.delete`)) {
+			store.update(current => {
+				const index = current.findIndex(item => item.$id === response.payload.$id)
+				if (index === -1) return current
+
+				current.splice(index, 1)
+				return current
+			})
+			return
+		}
+
+		if (response.events.includes(`databases.${databaseId}.collections.${collectionId}.documents.*.update`)) {
+			store.update(current => {
+				const index = current.findIndex(item => item.$id === response.payload.$id)
+				if (index === -1) return current
+
+				current[index] = response.payload
+				return current
+			})
+			return
+		}
+
+		if (response.events.includes(`databases.${databaseId}.collections.${collectionId}.documents.*.create`)) {
+			store.update(current => {
+				current.push(response.payload)
+				return current
+			})
+			return
+		}
+
 	})
 
 	return store
