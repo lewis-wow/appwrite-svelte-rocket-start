@@ -23,6 +23,7 @@
 	"dependencies": {
 		"@icons-pack/svelte-simple-icons": "^3.0.0",
 		"appwrite": "^10.1.0",
+		"svelte-i18n": "^3.6.0",
 		"svelte-routing": "^1.6.0"
 	}
 }

@@ -1,17 +1,10 @@
 <script lang="ts">
 	import './main.scss'
-	import { Router, Route } from '$lib/router'
+	import { i18n, isLoading } from './locales/i18n'
+	import Router from './Router.svelte'
 
-	/** routes */
-	import Index from './routes/index.svelte'
-
-	/** oauth routes */
-	import Failure from './routes/oauth/failure.svelte'
-	import OAuth from './routes/oauth/index.svelte'
-	import Success from './routes/oauth/success.svelte'
-
-	/** error 404 route */
-	import Error404 from './routes/404.svelte'
+	/** init i18n */
+	i18n()
 
 	/** register service worker */
 	if ('serviceWorker' in window.navigator) {
@@ -22,13 +15,7 @@
 </script>
 
 <main>
-	<Router>
-		<Route path="/" component={Index} />
-
-		<Route path="/oauth" component={OAuth} />
-		<Route path="/oauth/success" component={Success} />
-		<Route path="/oauth/failure" component={Failure} />
-
-		<Route path="/*" component={Error404} />
-	</Router>
+	{#if !$isLoading}
+		<Router />
+	{/if}
 </main>

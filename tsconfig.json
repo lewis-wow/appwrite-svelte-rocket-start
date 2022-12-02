@@ -5,6 +5,18 @@
 		"moduleResolution": "node",
 		"importHelpers": true,
 		"isolatedModules": true,
-		"noEmit": true
+		"noEmit": true,
+		"resolveJsonModule": true,
+		"paths": {
+			"$lib/*": [
+				"./src/lib/*"
+			],
+			"$root/*": [
+				"./*"
+			],
+			"$scr/*": [
+				"./scr/*"
+			],
+		},
 	}
 }

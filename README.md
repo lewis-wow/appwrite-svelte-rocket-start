@@ -21,6 +21,7 @@ Blazing fast development with done backend and fully-prepared frontend.
 * service worker
 * path aliases
 * database realtime subscribers
+* i18n
 * vite
 * prettier
 * editorconfig
