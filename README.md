@@ -54,14 +54,14 @@ Included:
 <Layout>
   <div>
     <input type="text" bind:value />
-    <button on:click={() => names.add({ name: value })}>Add</button>
+    <button on:click={() => subscriber.add({ name: value })}>Add</button>
   </div>
 
   <div>
     {#each $subscriber as collectionDocument}
       <div>
         <p>{collectionDocument.name}</p>
-        <button on:click={() => names.delete(collectionDocument.$id)}>Remove</button>
+        <button on:click={() => subscriber.delete(collectionDocument.$id)}>Remove</button>
       </div>
     {/each}
   </div>
