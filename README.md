@@ -2,6 +2,10 @@
 
 Blazing fast development with done backend and fully-prepared frontend.
 
+## Appwrite installation
+
+[Appwrite installation](https://appwrite.io/docs/installation)
+
 Frontend included:
 
 * tailwind
