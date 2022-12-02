@@ -6,7 +6,7 @@ Blazing fast development with done backend and fully-prepared frontend.
 
 [Appwrite installation](https://appwrite.io/docs/installation)
 
-Frontend included:
+## Frontend included
 
 * tailwind
 * scss
@@ -22,9 +22,6 @@ Frontend included:
 * path aliases
 * database realtime subscribers
 * vite
-
-Included:
-
 * prettier
 * editorconfig
 
