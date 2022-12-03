@@ -29,83 +29,103 @@ Blazing fast development with done backend and fully-prepared frontend.
 ## Database subscribers
 
 ```svelte
-  <script>
-    import CollectionSubscriber from '$lib/database'
-    import Layout from '$lib/components/Layout'
-
-    const subscriber = new CollectionSubscriber('[database-id]', '[collection-id]')
-    // listen changes in database and automatically rerender on change
-    // current data = [{ name: 'John', lastName: 'Doe' }, ...]
-  </script>
-
-  <Layout>
-    {$subscriber ? $subscriber[0].name : ''}
-  </Layout>
-```
-
-### Realtime todo app using CollectionSubscriber
-
-```svelte
 <script>
   import CollectionSubscriber from '$lib/database'
   import Layout from '$lib/components/Layout'
+  import { Query } from 'appwrite'
 
-  const subscriber = new CollectionSubscriber('[database-id]', '[collection-id]')
-  let value = ''
+  const collection = new Collection('[database-id]', '[collection-id]')
+  const [subscriber, loading, insertSubscriber] = collection.subscribe([Query.limit(5)])
+  // listen changes in database and automatically rerender on change
+  // current data = [{ name: 'John', lastName: 'Doe' }, ...]
 </script>
 
 <Layout>
-  <div>
-    <input type="text" bind:value />
-    <button on:click={() => subscriber.add({ name: value })}>Add</button>
-  </div>
-
-  <div>
-    {#each $subscriber as collectionDocument}
-      <div>
-        <p>{collectionDocument.name}</p>
-        <button on:click={() => subscriber.delete(collectionDocument.$id)}>Remove</button>
-      </div>
+  {#if $loading}
+    <p>Loading...</p>
+  {:else}
+    {#each [...$subscriber, ...$insertSubscriber] as item}
+      <p>{item.name}</p>
     {/each}
-  </div>
+  {/if}
 </Layout>
 ```
 
 ## Routing
 
 ```svelte
-  <script>
-    import { Router, Route, ProtectedRoute, Redirect, navigate, link, back, forward } from '$lib/router'
-    import Home from './routes/home.svelte'
-    import Profile from './routes/profile.svelte'
-    import { account } from '$lib/stores/appwrite'
-    import oauth from '$lib/stores/oauth'
+<script>
+  import { Router, Route, ProtectedRoute, Redirect, navigate, link, back, forward } from '$lib/router'
+  import Home from './routes/home.svelte'
+  import Profile from './routes/profile.svelte'
+  import { isLoading, user, logout } from '$lib/auth'
+</script>
 
-    const user = oauth(account)
-  </script>
-
-  <main>
+<main>
+  {#if !$isLoading}
     <Router>
       <Route path="/" component={Home}>
       <ProtectedRoute path="/profile" allow={$user?.status} fallback="/" component={Profile}>
 
       <a href="/about" use:link>About us</a>
     </Router>
-  </main>
+  {/if}
+</main>
 ```
 
 ## Social auth icons
 
 ```svelte
-  <script>
-    import { Github } from '@icons-pack/svelte-simple-icons'
-    import Layout from '$lib/components/Layout'
-    import { account, url } from '$lib/stores/appwrite'
-  </script>
+<script>
+  import { Github } from '@icons-pack/svelte-simple-icons'
+  import Layout from '$lib/components/Layout'
+  import { account, url } from '$lib/stores/appwrite'
+</script>
 
-  <Layout>
-    <button on:click={() => account.createOAuth2Session('github', url.oauth.success, url.oauth.failure)}>
-      <Github />
-    </button>
-  </Layout>
+<Layout>
+  <button on:click={() => account.createOAuth2Session('github', url.oauth.success, url.oauth.failure)}>
+    <Github />
+  </button>
+</Layout>
 ```
+
+## i18n
+
+Locale file `src/locales/en.json`
+
+```json
+{
+  "page": {
+    "home": {
+      "title": "Homepage"
+    }
+  }
+}
+```
+
+```svelte
+<script>
+  import Layout from '$lib/components/Layout'
+  import { _, locale, locales } from 'svelte-i18n'
+</script>
+
+<Layout>
+  <h1>{$_('page.home.title')}</h1>
+
+  <div>
+    <p>Change language:</p>
+
+    <select bind:value={$locale}>
+      {#each $locales as locale}
+        <option value={locale}>{locale}</option>
+      {/each}
+    </select>
+  </div>
+</Layout>
+```
+
+## path aliases
+
+`$lib` = `src/lib`
+`$root` = `/`
+`$src` = `src`

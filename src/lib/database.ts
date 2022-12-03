@@ -1,48 +1,31 @@
 import { writable } from 'svelte/store'
-import { client, databases } from './stores/appwrite'
-import type { Models, RealtimeResponseEvent } from 'appwrite'
+import { databases } from './stores/appwrite'
+import type { Models } from 'appwrite'
 import { ID } from 'appwrite'
+import subscribeInsert from './database/subscribeInsert'
+import subscribeUpdate from './database/subscribeUpdate'
 
-class CollectionSubscriber {
-	protected store = writable<Models.Document[]>([])
-	public subscribe = this.store.subscribe
+class Collection {
+	constructor(protected databaseId: string, protected collectionId: string) { }
 
-	constructor(protected databaseId: string, protected collectionId: string) {
-		databases.listDocuments(databaseId, collectionId).then(data => this.store.set(data.documents))
+	subscribeInsert() {
+		const dataStore = writable<Models.Document[]>([])
+		subscribeInsert(this.databaseId, this.collectionId, dataStore)
+		return { subscribe: dataStore.subscribe }
+	}
 
-		client.subscribe(`databases.${databaseId}.collections.${collectionId}.documents`, (response: RealtimeResponseEvent<any>) => {
+	subscribe(queries: string[] = []) {
+		const loadingStore = writable(true)
+		const dataStore = writable<Models.Document[]>([])
 
-			if (response.events.includes(`databases.${databaseId}.collections.${collectionId}.documents.*.delete`)) {
-				this.store.update(current => {
-					const index = current.findIndex(item => item.$id === response.payload.$id)
-					if (index === -1) return current
+		databases.listDocuments(this.databaseId, this.collectionId, queries).then(data => {
+			data.documents.forEach((document) => subscribeUpdate(this.databaseId, this.collectionId, dataStore, document))
 
-					current.splice(index, 1)
-					return current
-				})
-				return
-			}
-
-			if (response.events.includes(`databases.${databaseId}.collections.${collectionId}.documents.*.update`)) {
-				this.store.update(current => {
-					const index = current.findIndex(item => item.$id === response.payload.$id)
-					if (index === -1) return current
-
-					current[index] = response.payload
-					return current
-				})
-				return
-			}
-
-			if (response.events.includes(`databases.${databaseId}.collections.${collectionId}.documents.*.create`)) {
-				this.store.update(current => {
-					current.push(response.payload)
-					return current
-				})
-				return
-			}
-
+			dataStore.set(data.documents)
+			loadingStore.set(false)
 		})
+
+		return [{ subscribe: dataStore.subscribe }, { subscribe: loadingStore.subscribe }, this.subscribeInsert()] as const
 	}
 
 	add(data: { [key: string]: any } = {}, permissions: string[] = null) {
@@ -58,4 +41,4 @@ class CollectionSubscriber {
 	}
 }
 
-export default CollectionSubscriber
+export default Collection
