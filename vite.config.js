@@ -10,7 +10,7 @@ export default defineConfig({
 			'$lib': path.resolve(__dirname, 'src', 'lib'),
 			'$root': path.resolve(__dirname),
 			'$src': path.resolve(__dirname, 'src'),
-			'$cms': path.resolve(__dirname, 'src', 'cms')
+			'$cms': path.resolve(__dirname, 'cms')
 		}
 	},
 	plugins: [
@@ -20,5 +20,13 @@ export default defineConfig({
 				postcss: true
 			})
 		})
-	]
+	],
+	build: {
+		rollupOptions: {
+			input: {
+				app: path.resolve(__dirname, 'index.html'),
+				cms: path.resolve(__dirname, 'cms', 'index.html')
+			}
+		}
+	}
 })
