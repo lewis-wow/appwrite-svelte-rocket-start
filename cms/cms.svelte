@@ -17,7 +17,7 @@
 
 <main>
 	{#if !$isLoading}
-		<Router basepath="/cms">
+		<Router>
 			<Route path="/" component={Index} />
 		</Router>
 	{/if}

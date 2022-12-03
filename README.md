@@ -2,6 +2,8 @@
 
 Blazing fast development with done backend and fully-prepared frontend.
 
+CMS ready!
+
 ## Appwrite installation
 
 [Appwrite installation](https://appwrite.io/docs/installation)
@@ -17,11 +19,11 @@ Blazing fast development with done backend and fully-prepared frontend.
 * oauth
 * folder structure
 * common components
-* simple icons
 * service worker
 * path aliases
 * database realtime subscribers
 * i18n
+* cms
 * vite
 * prettier
 * editorconfig
@@ -73,18 +75,17 @@ Blazing fast development with done backend and fully-prepared frontend.
 </main>
 ```
 
-## Social auth icons
+## Social auth
 
 ```svelte
 <script>
-  import { Github } from '@icons-pack/svelte-simple-icons'
   import Layout from '$lib/components/Layout'
   import { account, url } from '$lib/stores/appwrite'
 </script>
 
 <Layout>
   <button on:click={() => account.createOAuth2Session('github', url.oauth.success, url.oauth.failure)}>
-    <Github />
+    Github
   </button>
 </Layout>
 ```
@@ -127,5 +128,39 @@ Locale file `src/locales/en.json`
 ## path aliases
 
 `$lib` = `src/lib`
+
 `$root` = `/`
+
 `$src` = `src`
+
+`$cms` = `cms`
+
+## commands
+
+```bash
+npm run dev
+```
+
+```bash
+npm run build
+```
+
+```bash
+npm run preview
+```
+
+```bash
+npm run appwrite
+```
+
+```bash
+npm run cms:dev
+```
+
+```bash
+npm run cms:build
+```
+
+```bash
+npm run cms:preview
+```

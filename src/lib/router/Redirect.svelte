@@ -3,7 +3,7 @@
 	import { navigate } from 'svelte-routing'
 
 	export let to: string
-	export let state: any
+	export let state: any = null
 	export let replace = false
 
 	onMount(() => navigate(to, { replace, state }))
