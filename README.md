@@ -155,15 +155,3 @@ npm run preview
 ```bash
 npm run appwrite
 ```
-
-```bash
-npm run cms:dev
-```
-
-```bash
-npm run cms:build
-```
-
-```bash
-npm run cms:preview
-```
