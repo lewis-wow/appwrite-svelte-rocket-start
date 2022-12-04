@@ -24,9 +24,11 @@ CMS ready!
 * database realtime subscribers
 * i18n
 * cms
+* cms forms components
 * vite
 * prettier
 * editorconfig
+* icons: [Bootstrap icons](https://icons.getbootstrap.com/)
 
 ## Database subscribers
 
@@ -37,7 +39,8 @@ CMS ready!
   import { Query } from 'appwrite'
 
   const collection = new Collection('[database-id]', '[collection-id]')
-  const [subscriber, loading, insertSubscriber] = collection.subscribe([Query.limit(5)])
+  const [subscriber, loading] = collection.subscribe([Query.limit(5)])
+  const insertSubscriber = collection.subscribeInsert()
   // listen changes in database and automatically rerender on change
   // current data = [{ name: 'John', lastName: 'Doe' }, ...]
 </script>

@@ -25,7 +25,7 @@ class Collection {
 			loadingStore.set(false)
 		})
 
-		return [{ subscribe: dataStore.subscribe }, { subscribe: loadingStore.subscribe }, this.subscribeInsert()] as const
+		return [{ subscribe: dataStore.subscribe }, { subscribe: loadingStore.subscribe }] as const
 	}
 
 	add(data: { [key: string]: any } = {}, permissions: string[] = null) {

@@ -3,7 +3,8 @@ import { svelte } from '@sveltejs/vite-plugin-svelte'
 import preprocess from "svelte-preprocess"
 import path from 'path'
 
-export const config = {
+// https://vitejs.dev/config/
+export default defineConfig({
 	resolve: {
 		alias: {
 			'$lib': path.resolve(__dirname, 'src', 'lib'),
@@ -19,8 +20,13 @@ export const config = {
 				postcss: true
 			})
 		})
-	]
-}
-
-// https://vitejs.dev/config/
-export default defineConfig(config)
+	],
+	build: {
+		rollupOptions: {
+			input: {
+				app: path.resolve(__dirname, 'index.html'),
+				cms: path.resolve(__dirname, 'cms', 'index.html')
+			}
+		}
+	}
+})
