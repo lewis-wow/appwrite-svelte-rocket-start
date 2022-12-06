@@ -1,9 +1,14 @@
 import type { Models } from 'appwrite'
 import { writable } from 'svelte/store'
-import { account } from './stores/appwrite'
+import { account, client } from './stores/appwrite'
 
 const userStore = writable<Models.Account<Models.Preferences>>(null)
 const loadingStore = writable(true)
+
+client.subscribe('account', response => {
+	// Callback will be executed on all account events.
+	console.log(response)
+})
 
 account.get().then(data => {
 	userStore.set(data)
