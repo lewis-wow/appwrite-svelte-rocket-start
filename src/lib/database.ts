@@ -92,6 +92,8 @@ const paginate = (databaseId: string, collectionId: string, limit: number, queri
 		subscribe: dataStore.subscribe,
 		async next() {
 			await databases.listDocuments(databaseId, collectionId, [...queries, Query.limit(limit), Query.offset(offset)]).then(data => {
+				data.documents.forEach((document) => subscribeUpdate(databaseId, collectionId, dataStore, document))
+
 				dataStore.update(current => [...current, ...data.documents])
 				offset += limit
 			})

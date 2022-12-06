@@ -47,7 +47,7 @@ CMS ready!
   // listen changes (create) in database and automatically rerender on change
 
   const [paginator, paginatorInitalLoading] = collection.createPaginator(10, [/* ...queries */])
-  // paginate the collection of documents with limit
+  // paginate the collection of documents with limit and automatically rerender on change
   // paginator.next() makes the next request for items
 </script>
 
