@@ -39,10 +39,16 @@ CMS ready!
   import { Query } from 'appwrite'
 
   const collection = new Collection('[database-id]', '[collection-id]')
-  const [subscriber, loading] = collection.subscribe([Query.limit(5)])
-  const insertSubscriber = collection.subscribeInsert()
-  // listen changes in database and automatically rerender on change
+  const [subscriber, loading] = collection.createSubscriber([Query.limit(5)])
+  // listen changes (update, delete) in database and automatically rerender on change
   // current data = [{ name: 'John', lastName: 'Doe' }, ...]
+
+  const insertSubscriber = collection.createObserver()
+  // listen changes (create) in database and automatically rerender on change
+
+  const [paginator, paginatorInitalLoading] = collection.createPaginator(10, [/* ...queries */])
+  // paginate the collection of documents with limit
+  // paginator.next() makes the next request for items
 </script>
 
 <Layout>
@@ -101,7 +107,7 @@ Locale file `src/locales/en.json`
 {
   "page": {
     "home": {
-      "title": "Homepage"
+      "title": "Appwrite svelte rocket start 🚀"
     }
   }
 }
