@@ -141,7 +141,7 @@ Locale file `src/locales/en.json`
 
 `$cms` = `cms`
 
-`$routes` = `routes`
+`$routes` = `src/routes`
 
 ## commands
 

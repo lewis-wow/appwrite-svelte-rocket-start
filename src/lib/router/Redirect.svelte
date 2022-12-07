@@ -6,5 +6,10 @@
 	export let state: any = null
 	export let replace = false
 
-	onMount(() => navigate(to, { replace, state }))
+	export let then: (to: string) => any = () => null
+
+	onMount(() => {
+		navigate(to, { replace, state })
+		then(to)
+	})
 </script>

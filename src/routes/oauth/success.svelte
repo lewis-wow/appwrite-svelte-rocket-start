@@ -1,10 +1,14 @@
 <script lang="ts">
-	import { Redirect } from '$lib/router'
+	import { navigate } from '$lib/router'
+	import { onMount } from 'svelte'
+
+	onMount(() => {
+		const currentTitle = document.title
+		document.title = 'Authorizing...'
+
+		navigate('/', { replace: true })
+		return () => (document.title = currentTitle)
+	})
 </script>
 
-<svelte:head>
-	<title>Authorizing...</title>
-</svelte:head>
-
 <p>Authorizing...</p>
-<Redirect to="/" />
