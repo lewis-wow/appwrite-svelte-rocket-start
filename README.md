@@ -35,7 +35,6 @@ CMS ready!
 ```svelte
 <script>
   import CollectionSubscriber from '$lib/database'
-  import Layout from '$lib/components/Layout'
   import { Query } from 'appwrite'
 
   const collection = new Collection('[database-id]', '[collection-id]')
@@ -46,20 +45,20 @@ CMS ready!
   const insertSubscriber = collection.createObserver()
   // listen changes (create) in database and automatically rerender on change
 
-  const [paginator, paginatorInitalLoading] = collection.createPaginator(10, [/* ...queries */])
+  const [paginator, paginatorInitalLoading] = collection.createPaginate(10, [/* ...queries */])
   // paginate the collection of documents with limit and automatically rerender on change
-  // paginator.next() makes the next request for items
+  // paginator.next() makes the next request for items, paginator store automatically rerender on next load
 </script>
 
-<Layout>
+<div>
   {#if $loading}
-    <p>Loading...</p>
+    <p>Loading data from database...</p>
   {:else}
     {#each [...$subscriber, ...$insertSubscriber] as item}
       <p>{item.name}</p>
     {/each}
   {/if}
-</Layout>
+</div>
 ```
 
 ## Routing
@@ -88,15 +87,14 @@ CMS ready!
 
 ```svelte
 <script>
-  import Layout from '$lib/components/Layout'
   import { account, url } from '$lib/stores/appwrite'
 </script>
 
-<Layout>
+<div>
   <button on:click={() => account.createOAuth2Session('github', url.oauth.success, url.oauth.failure)}>
     Github
   </button>
-</Layout>
+</div>
 ```
 
 ## i18n
@@ -115,11 +113,10 @@ Locale file `src/locales/en.json`
 
 ```svelte
 <script>
-  import Layout from '$lib/components/Layout'
   import { _, locale, locales } from 'svelte-i18n'
 </script>
 
-<Layout>
+<div>
   <h1>{$_('page.home.title')}</h1>
 
   <div>
@@ -131,7 +128,7 @@ Locale file `src/locales/en.json`
       {/each}
     </select>
   </div>
-</Layout>
+</div>
 ```
 
 ## path aliases
@@ -143,6 +140,8 @@ Locale file `src/locales/en.json`
 `$src` = `src`
 
 `$cms` = `cms`
+
+`$routes` = `routes`
 
 ## commands
 
