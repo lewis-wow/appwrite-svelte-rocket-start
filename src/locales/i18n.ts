@@ -1,6 +1,7 @@
 import { register, init, getLocaleFromNavigator, isLoading, locale, locales } from 'svelte-i18n'
+import registers from './languages'
 
-register('en', () => import('./en.json'))
+Object.entries(registers).forEach(([key, file]) => register(key, file))
 
 export const i18n = () => init({
 	fallbackLocale: 'en',

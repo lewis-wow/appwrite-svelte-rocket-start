@@ -12,6 +12,8 @@ class Collection {
 	}
 
 	updateDocument(documentId: string, data: { [key: string]: any } = {}, permissions: string[] = null) {
+		if (permissions.length === 0 && Object.keys(data).length === 0) return
+
 		return databases.updateDocument(this.databaseId, this.collectionId, documentId, data, permissions)
 	}
 
@@ -118,6 +120,16 @@ class Document {
 		})
 
 		return [{ subscribe: dataStore.subscribe }, { subscribe: loadingStore.subscribe }] as const
+	}
+
+	delete() {
+		return databases.deleteDocument(this.databaseId, this.collectionId, this.documentId)
+	}
+
+	update(data: { [key: string]: any } = {}, permissions: string[] = []) {
+		if (permissions.length === 0 && Object.keys(data).length === 0) return
+
+		return databases.updateDocument(this.databaseId, this.collectionId, this.documentId, data, permissions)
 	}
 }
 

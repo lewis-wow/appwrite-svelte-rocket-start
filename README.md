@@ -17,6 +17,7 @@ CMS ready!
 * routing
 * ready routes
 * oauth
+* files upload, download
 * folder structure
 * common components
 * service worker
@@ -34,7 +35,7 @@ CMS ready!
 
 ```svelte
 <script>
-  import CollectionSubscriber from '$lib/database'
+  import { Collection } from '$lib/database'
   import { Query } from 'appwrite'
 
   const collection = new Collection('[database-id]', '[collection-id]')
@@ -61,6 +62,32 @@ CMS ready!
 </div>
 ```
 
+## Files subscribers
+
+```svelte
+<script>
+  import { Bucket } from '$lib/storage'
+  import { Query } from 'appwrite'
+
+  const bucket = new Bucket('[bucket-id]')
+  const [files, loading] = bucket.createSubscriber([Query.limit(5)])
+  // listen changes (update, delete) in files and automatically rerender on change
+
+  const insertSubscriber = bucket.createObserver()
+  // listen changes (create) in files and automatically rerender on change
+
+  const [upload, dispatch] = storage.createUploadDispatcher(/* many files ? true : false, default = false */)
+
+  const [content, loading] = storage.getFileContent('6391f7c70ede82115575')
+  // get file content and automatically rerender on file update
+</script>
+
+<div>
+  <input type="file" use:upload />
+  <button on:click={() => dispatch().then(uploadedFile => console.log(uploadedFile))}>Upload</button> 
+</div>
+```
+
 ## Routing
 
 ```svelte
@@ -82,6 +109,14 @@ CMS ready!
   {/if}
 </main>
 ```
+
+### Routes structure
+
+`__layout.svelte` the default layout for every page
+
+`__error.svelte` the error page (404 error)
+
+`__routes.svelte` the file includes all routes in application
 
 ## Social auth
 
