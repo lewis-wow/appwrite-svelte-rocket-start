@@ -23,6 +23,7 @@ CMS ready!
 * service worker
 * path aliases
 * database realtime subscribers
+* database paginate, infinity scroll
 * i18n
 * cms
 * cms forms components
@@ -39,7 +40,7 @@ CMS ready!
   import { Query } from 'appwrite'
 
   const collection = new Collection('[database-id]', '[collection-id]')
-  const [subscriber, loading] = collection.createSubscriber([Query.limit(5)])
+  const [subscriber, loading] = collection.createSubscriber([Query.limit(5) /*, ...queries */])
   // listen changes (update, delete) in database and automatically rerender on change
   // current data = [{ name: 'John', lastName: 'Doe' }, ...]
 
@@ -49,6 +50,9 @@ CMS ready!
   const [paginator, paginatorInitalLoading] = collection.createPaginate(10, [/* ...queries */])
   // paginate the collection of documents with limit and automatically rerender on change
   // paginator.next() makes the next request for items, paginator store automatically rerender on next load
+
+  const [scrollData, scrollDispatch] = collection.createInfinityScrollDispatcher(10, [/* ...queries */], { /* intersection observer options */ })
+  // load next data after scroll to anchor (scrollDispatch) element
 </script>
 
 <div>
@@ -60,6 +64,14 @@ CMS ready!
     {/each}
   {/if}
 </div>
+
+<!-- scroll dispatcher example -->
+<div>
+  {#each $scrollData as item}
+    <p>{item.name}</p>
+  {/each}
+  <div use:scrollDispatch on:fetch={(e) => console.log(e) /* on every fetch from scroll dispatcher do some action */} />
+</div>
 ```
 
 ## Files subscribers
@@ -70,7 +82,7 @@ CMS ready!
   import { Query } from 'appwrite'
 
   const bucket = new Bucket('[bucket-id]')
-  const [files, loading] = bucket.createSubscriber([Query.limit(5)])
+  const [files, loading] = bucket.createSubscriber([Query.limit(5) /*, ...queries */])
   // listen changes (update, delete) in files and automatically rerender on change
 
   const insertSubscriber = bucket.createObserver()

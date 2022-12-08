@@ -60,18 +60,60 @@ class Collection {
 		const store = {
 			subscribe: dataStore.subscribe,
 			async next() {
-				await databases.listDocuments(this.databaseId, this.collectionId, [...queries, Query.limit(limit), Query.offset(offset)]).then(data => {
-					data.documents.forEach((document) => this.subscribeCollectionUpdate(document, dataStore))
+				const data = await databases.listDocuments(this.databaseId, this.collectionId, [...queries, Query.limit(limit), Query.offset(offset)])
+				data.documents.forEach((document) => this.subscribeCollectionUpdate(document, dataStore))
 
-					dataStore.update(current => [...current, ...data.documents])
-					offset += limit
-				})
+				dataStore.update(current => [...current, ...data.documents])
+				offset += limit
 			}
 		}
 
 		store.next().then(() => loadingStore.set(false))
 
 		return [store, { subscribe: loadingStore.subscribe }] as const
+	}
+
+	createInfinityScrollDispatcher(limit: number, queries: string[] = [], observerOptions: IntersectionObserverInit = {}) {
+		const dataStore = writable<Models.Document[]>([])
+		let lastId: string = null
+
+		databases.listDocuments(this.databaseId, this.collectionId, [...queries, Query.limit(limit)]).then(firstData => {
+			dataStore.set(firstData.documents)
+			firstData.documents.forEach((document) => this.subscribeCollectionUpdate(document, dataStore))
+			lastId = firstData.documents[firstData.documents.length - 1].$id
+		})
+
+		const observer = new IntersectionObserver((entries, me) => {
+			if (lastId === null) return
+
+			entries.forEach(entry => {
+				if (!entry.isIntersecting) return
+
+				databases.listDocuments(this.databaseId, this.collectionId, [...queries, Query.limit(limit), Query.cursorAfter(lastId)]).then((data) => {
+					dataStore.update(current => {
+						current.push(...data.documents)
+						lastId = current[current.length - 1].$id
+						return current
+					})
+
+					data.documents.forEach((document) => this.subscribeCollectionUpdate(document, dataStore))
+
+					entry.target.dispatchEvent(new CustomEvent('fetch', entry.target as CustomEventInit<HTMLElement>))
+				})
+			})
+		}, observerOptions)
+
+		const directive = (node: HTMLElement) => {
+			observer.observe(node)
+
+			return {
+				destroy() {
+					observer.disconnect()
+				}
+			}
+		}
+
+		return [{ subscribe: dataStore.subscribe }, directive] as const
 	}
 
 	protected subscribeCollectionUpdate(document: Models.Document, store: Writable<Models.Document[]>) {

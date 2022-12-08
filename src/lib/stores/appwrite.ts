@@ -1,4 +1,5 @@
 import { Client, Account, Databases, Storage, Teams, Functions, Locale, Avatars } from 'appwrite'
+import settings from '../appwriteSettings'
 
 const client = new Client()
 const account = new Account(client)
@@ -16,7 +17,7 @@ const url = {
 	}
 }
 
-client.setEndpoint('http://localhost/v1').setProject('638871b363904655d784')
+client.setEndpoint(settings.endpoint).setProject(settings.project)
 
 export default client
 export { client, account, url, databases, storage, teams, functions, locale, avatars }
