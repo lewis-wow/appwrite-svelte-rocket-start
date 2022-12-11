@@ -27,11 +27,11 @@
 
 <Router>
 	{#if !$isLoading && isMounted}
-		{#each routes as { path, layout, component, loading }}
+		{#each routes as { path, layout, component, loading, before }}
 			<Route {path} let:location let:params>
 				{#if layout}
 					<svelte:component this={layout}>
-						<LazyRouteGuard {location} {params} {component} {loading} />
+						<LazyRouteGuard {location} {params} {component} {loading} {before} />
 					</svelte:component>
 				{:else}
 					<LazyRouteGuard {location} {params} {component} {loading} />

@@ -7,10 +7,13 @@
 	export let loading: ComponentType<SvelteComponentTyped<any>> | null = null
 	export let location: RouteLocation
 	export let params: RouteParams
+	export let before: () => any
 
 	let loadedComponent = null
 
 	onMount(() => {
+		before()
+
 		component().then((module) => {
 			loadedComponent = module.default
 		})

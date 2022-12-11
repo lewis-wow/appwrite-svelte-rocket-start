@@ -5,6 +5,7 @@ export interface Route {
 	path: string,
 	layout?: ComponentType<SvelteComponentTyped<any>>,
 	loading?: ComponentType<SvelteComponentTyped<any>>,
+	before?: () => any,
 }
 
 interface RouteDefinition {
@@ -12,6 +13,7 @@ interface RouteDefinition {
 	path: string,
 	layout: ComponentType<SvelteComponentTyped<any>> | null,
 	loading: ComponentType<SvelteComponentTyped<any>> | null,
+	before: () => any | null,
 }
 
 interface RouteConfig {
@@ -21,7 +23,7 @@ interface RouteConfig {
 }
 
 const defineRoutes = (config: RouteConfig): RouteDefinition[] => {
-	return config.routes.map(route => ({ ...route, layout: route?.layout ?? config?.layout ?? null, loading: route?.loading ?? config?.loading ?? null }))
+	return config.routes.map(route => ({ ...route, layout: route?.layout ?? config?.layout ?? null, loading: route?.loading ?? config?.loading ?? null, before: route?.before ?? null }))
 }
 
 export default defineRoutes

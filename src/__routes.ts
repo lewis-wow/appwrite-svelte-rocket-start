@@ -1,3 +1,4 @@
+import { user } from '$lib/auth'
 import { defineRoutes } from '$lib/router';
 
 import Layout from '$src/__layout.svelte'
@@ -7,7 +8,7 @@ export default defineRoutes({
 	routes: [
 		{ 
 			path: '/', 
-			component: () => import('$routes/index.svelte') 
+			component: () => import('$routes/index.svelte'),
 		},
 		{ 
 			path: '/oauth', 

@@ -102,24 +102,34 @@ CMS ready!
 
 ## Routing
 
-```svelte
-<script>
-  import { Router, Route, ProtectedRoute, Redirect, navigate, link, back, forward } from '$lib/router'
-  import Home from './routes/home.svelte'
-  import Profile from './routes/profile.svelte'
-  import { isLoading, user, logout } from '$lib/auth'
-</script>
+Routes can be added in `__routes.ts` file. Every route is fetched lazyly.
 
-<main>
-  {#if !$isLoading}
-    <Router>
-      <Route path="/" component={Home}>
-      <ProtectedRoute path="/profile" allow={$user?.status} fallback="/" component={Profile}>
-
-      <a href="/about" use:link>About us</a>
-    </Router>
-  {/if}
-</main>
+```ts
+export default defineRoutes({
+  routes: [
+    { 
+      path: '/', 
+      component: () => import('$routes/index.svelte'), 
+      before: () => get(user).isLoggedIn && navigate('/dashboard') // before route is rendered call before function
+    },
+    { 
+      path: '/oauth', 
+      component: () => import('$routes/oauth/index.svelte') 
+    },
+    { 
+      path: '/oauth/failure', 
+      component: () => import('$routes/oauth/failure.svelte'),
+      loading: LoadingCircle // loading component can be choosed for every route
+    },
+    { 
+      path: '/oauth/success', 
+      component: () => import('$routes/oauth/success.svelte'),
+      layout: LayoutReset // layout component can be choosed for every route
+    },
+  ],
+  layout: Layout, // default layout component (__layout.svelte)
+  loading: Loading, // default loading component (__loading.svelte)
+})
 ```
 
 ### Routes structure
@@ -128,7 +138,9 @@ CMS ready!
 
 `__error.svelte` the error page (404 error)
 
-`__routes.svelte` the file includes all routes in application
+`loading.svelte` the loading component
+
+`__routes.ts` the file includes all routes in application
 
 ## Social auth
 
@@ -186,7 +198,7 @@ Locale file `src/locales/en.json`
 
 `$src` = `src`
 
-`$cms` = `cms`
+`$cms` = `src/cms`
 
 `$routes` = `src/routes`
 
