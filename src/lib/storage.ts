@@ -1,4 +1,4 @@
-import { storage, client } from './stores/appwrite'
+import { storage, client } from './appwrite'
 import { ID, Models, RealtimeResponseEvent } from 'appwrite'
 import { Writable, writable } from 'svelte/store'
 

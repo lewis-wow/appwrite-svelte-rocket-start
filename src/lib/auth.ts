@@ -1,6 +1,6 @@
 import type { Models, RealtimeResponseEvent } from 'appwrite'
 import { writable } from 'svelte/store'
-import { account, client } from './stores/appwrite'
+import { account, client } from './appwrite'
 
 const userStore = writable<Models.Account<Models.Preferences>>(null)
 const loadingStore = writable(true)

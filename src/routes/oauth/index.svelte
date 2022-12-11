@@ -1,5 +1,5 @@
 <script>
-	import { account, url } from '$lib/stores/appwrite'
+	import { account, url } from '$lib/appwrite'
 </script>
 
 <div>

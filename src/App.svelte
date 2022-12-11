@@ -5,9 +5,9 @@
 	import { Router, Route } from '$lib/router'
 
 	/** layout */
-	import Routes from './__routes.svelte'
+	import routes from './__routes'
 	import Error from './__error.svelte'
-	import Layout from './__layout.svelte'
+	import LazyRoute from '$lib/router/LazyRoute.svelte'
 
 	let isMounted = false
 	onMount(() => {
@@ -25,11 +25,13 @@
 	})
 </script>
 
-<Layout>
-	<Router>
-		{#if !$isLoading && isMounted}
-			<Routes />
-			<Route path="/*" component={Error} />
-		{/if}
-	</Router>
-</Layout>
+<Router>
+	{#if !$isLoading && isMounted}
+		{#each routes as { path, layout, component }}
+			<svelte:component this={layout}>
+				<LazyRoute {path} {component} />
+			</svelte:component>
+		{/each}
+		<Route path="/*" component={Error} />
+	{/if}
+</Router>

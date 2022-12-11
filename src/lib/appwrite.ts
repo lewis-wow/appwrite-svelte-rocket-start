@@ -1,5 +1,4 @@
 import { Client, Account, Databases, Storage, Teams, Functions, Locale, Avatars } from 'appwrite'
-import settings from '../appwriteSettings'
 
 const client = new Client()
 const account = new Account(client)
@@ -12,12 +11,12 @@ const avatars = new Avatars(client)
 
 const url = {
 	oauth: {
-		success: 'http://localhost:5173/oauth/success',
-		failure: 'http://localhost:5173/oauth/failure'
+		success: `${import.meta.env.VITE_HOSTNAME}/oauth/success`,
+		failure: `${import.meta.env.VITE_HOSTNAME}/oauth/failure`
 	}
 }
 
-client.setEndpoint(settings.endpoint).setProject(settings.project)
+client.setEndpoint(import.meta.env.VITE_APPWRITE_ENDPOINT).setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID)
 
 export default client
 export { client, account, url, databases, storage, teams, functions, locale, avatars }

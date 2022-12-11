@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store'
-import { databases, client } from './stores/appwrite'
+import { databases, client } from './appwrite'
 import { Models, Query, RealtimeResponseEvent } from 'appwrite'
 import { ID } from 'appwrite'
 import type { Writable } from 'svelte/store'
