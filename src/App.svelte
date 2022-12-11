@@ -7,7 +7,6 @@
 	/** layout */
 	import routes from './__routes'
 	import Error from './__error.svelte'
-	import LazyRoute from '$lib/router/LazyRoute.svelte'
 	import LazyRouteGuard from '$lib/router/LazyRouteGuard.svelte'
 
 	let isMounted = false
@@ -30,9 +29,13 @@
 	{#if !$isLoading && isMounted}
 		{#each routes as { path, layout, component, loading }}
 			<Route {path} let:location let:params>
-				<svelte:component this={layout}>
+				{#if layout}
+					<svelte:component this={layout}>
+						<LazyRouteGuard {location} {params} {component} {loading} />
+					</svelte:component>
+				{:else}
 					<LazyRouteGuard {location} {params} {component} {loading} />
-				</svelte:component>
+				{/if}
 			</Route>
 		{/each}
 		<Route path="/*" component={Error} />

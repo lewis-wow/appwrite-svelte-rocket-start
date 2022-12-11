@@ -1,6 +1,3 @@
-import Layout from '$src/__layout.svelte'
-import Loading from '$src/__loading.svelte'
-
 import { ComponentType, SvelteComponentTyped  } from 'svelte'
 
 export interface Route {
@@ -13,16 +10,18 @@ export interface Route {
 interface RouteDefinition {
 	component: () => Promise<any>,
 	path: string,
-	layout: ComponentType<SvelteComponentTyped<any>>,
-	loading: ComponentType<SvelteComponentTyped<any>>,
+	layout: ComponentType<SvelteComponentTyped<any>> | null,
+	loading: ComponentType<SvelteComponentTyped<any>> | null,
 }
 
-interface RouteDefault {
-	layout: ComponentType<SvelteComponentTyped<any>>,
-	loading: ComponentType<SvelteComponentTyped<any>>,
+interface RouteConfig {
+	routes: Route[],
+	layout?: ComponentType<SvelteComponentTyped<any>> | null,
+	loading?: ComponentType<SvelteComponentTyped<any>> | null,
 }
 
-const defineRoutes = (routes: Route[], { layout = Layout, loading = Loading }: RouteDefault = { layout: Layout, loading: Loading }): RouteDefinition[] => 
-	routes.map(route => ({ ...route, layout: route?.layout ?? layout, loading: route?.loading ?? loading }))
+const defineRoutes = (config: RouteConfig): RouteDefinition[] => {
+	return config.routes.map(route => ({ ...route, layout: route?.layout ?? config?.layout ?? null, loading: route?.loading ?? config?.loading ?? null }))
+}
 
 export default defineRoutes
