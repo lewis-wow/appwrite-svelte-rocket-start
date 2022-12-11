@@ -7,7 +7,7 @@ export default defineRoutes({
 	routes: [
 		{ 
 			path: '/', 
-			component: () => import('./routes/index.svelte') 
+			component: () => import('$routes/index.svelte') 
 		},
 		{ 
 			path: '/oauth', 
