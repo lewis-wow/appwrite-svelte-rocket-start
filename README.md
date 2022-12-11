@@ -138,7 +138,7 @@ export default defineRoutes({
 
 `__error.svelte` the error page (404 error)
 
-`__loading.svelte` the loading component
+`__loading.svelte` the default loading component
 
 `__routes.ts` the file includes all routes in application
 
