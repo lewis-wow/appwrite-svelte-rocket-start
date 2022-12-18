@@ -104,34 +104,40 @@ CMS ready!
 
 ## Routing
 
-Routes can be added in `__routes.ts` file. Every route is fetched lazyly.
+Routes can be added in `__routes.svelte` file. Every route is fetched lazyly.
 
-```ts
-export default defineRoutes({
-  routes: [
-    { 
-      path: '/', 
-      component: () => import('$routes/index.svelte'), 
-      before: () => get(user).isLoggedIn && navigate('/dashboard') // before route is rendered call before function
+```svelte
+<script lang="ts">
+  import Router from '$lib/router/Router.svelte'
+
+  import Layout from '$src/__layout.svelte'
+  import Loading from '$src/__loading.svelte'
+  import Error from '$src/__error.svelte'
+</script>
+
+<Router
+  layout={Layout}
+  loading={Loading}
+  error={Error}
+  routes={[
+    {
+      path: '/',
+      component: () => import('$routes/index.svelte'),
     },
-    { 
-      path: '/oauth', 
-      component: () => import('$routes/oauth/index.svelte') 
+    {
+      path: '/oauth',
+      component: () => import('$routes/oauth/index.svelte'),
     },
-    { 
-      path: '/oauth/failure', 
+    {
+      path: '/oauth/failure',
       component: () => import('$routes/oauth/failure.svelte'),
-      loading: LoadingCircle // loading component can be choosed for every route
     },
-    { 
-      path: '/oauth/success', 
+    {
+      path: '/oauth/success',
       component: () => import('$routes/oauth/success.svelte'),
-      layout: LayoutReset // layout component can be choosed for every route
     },
-  ],
-  layout: Layout, // default layout component (__layout.svelte)
-  loading: Loading, // default loading component (__loading.svelte)
-})
+  ]}
+/>
 ```
 
 ### Routes structure
@@ -142,7 +148,7 @@ export default defineRoutes({
 
 `__loading.svelte` the default loading component
 
-`__routes.ts` the file includes all routes in application
+`__routes.svelte` the file includes all routes in application
 
 ## Social auth
 

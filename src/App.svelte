@@ -2,12 +2,9 @@
 	import './main.scss'
 	import { i18n, isLoading } from './locales/i18n'
 	import { onMount } from 'svelte'
-	import { Router, Route } from '$lib/router'
+	import { Router } from '$lib/router'
 
-	/** layout */
-	import routes from './__routes'
-	import Error from './__error.svelte'
-	import LazyRouteGuard from '$lib/router/LazyRouteGuard.svelte'
+	import Routes from './__routes.svelte'
 
 	let isMounted = false
 	onMount(() => {
@@ -27,17 +24,6 @@
 
 <Router>
 	{#if !$isLoading && isMounted}
-		{#each routes as { path, layout, component, loading, before }}
-			<Route {path} let:location let:params>
-				{#if layout}
-					<svelte:component this={layout}>
-						<LazyRouteGuard {location} {params} {component} {loading} {before} />
-					</svelte:component>
-				{:else}
-					<LazyRouteGuard {location} {params} {component} {loading} />
-				{/if}
-			</Route>
-		{/each}
-		<Route path="/*" component={Error} />
+		<Routes />
 	{/if}
 </Router>

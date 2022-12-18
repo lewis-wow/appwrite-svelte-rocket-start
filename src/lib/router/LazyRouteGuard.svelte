@@ -1,20 +1,26 @@
 <script lang="ts">
-	import { onMount } from 'svelte'
+	import { onMount, SvelteComponent } from 'svelte'
 	import type { ComponentType, SvelteComponentTyped } from 'svelte'
 	import type { RouteLocation, RouteParams } from 'svelte-routing/types/Route'
 
-	export let component: () => Promise<any>
+	export let component: (() => Promise<any>) | ComponentType<SvelteComponentTyped<any>>
 	export let loading: ComponentType<SvelteComponentTyped<any>> | null = null
 	export let location: RouteLocation
 	export let params: RouteParams
-	export let before: () => any
+	export let before: (() => any) | null = null
 
 	let loadedComponent = null
+	const __before = async () => (before ? await before() : null)
 
 	onMount(() => {
-		before()
+		__before()
 
-		component().then((module) => {
+		if (component instanceof SvelteComponent) {
+			loadedComponent = component
+			return
+		}
+
+		;(component as () => Promise<any>)().then((module) => {
 			loadedComponent = module.default
 		})
 	})
