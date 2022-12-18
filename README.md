@@ -1,5 +1,7 @@
 # Svelte + Appwrite = 🚀
 
+## Appwrite svelte template
+
 Blazing fast development with done backend and fully-prepared frontend.
 
 CMS ready!

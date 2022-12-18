@@ -1,4 +1,3 @@
-import { user } from '$lib/auth'
 import { defineRoutes } from '$lib/router';
 
 import Layout from '$src/__layout.svelte'
