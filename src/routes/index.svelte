@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Link from '$lib/components/Link.svelte'
+	import { Link } from '$lib/components/Common'
 	import { _ } from 'svelte-i18n'
 </script>
 

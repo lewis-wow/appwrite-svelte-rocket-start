@@ -10,7 +10,6 @@ export default defineConfig({
 			'$lib': path.resolve(__dirname, 'src', 'lib'),
 			'$root': path.resolve(__dirname),
 			'$src': path.resolve(__dirname, 'src'),
-			'$cms': path.resolve(__dirname, 'src', 'cms'),
 			'$routes': path.resolve(__dirname, 'src', 'routes')
 		}
 	},
