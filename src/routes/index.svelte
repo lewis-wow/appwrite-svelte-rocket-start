@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Link } from '$lib/components/Common'
+	import { Button } from '$lib/components/Common'
 	import { _ } from 'svelte-i18n'
 </script>
 
@@ -7,13 +7,13 @@
 	<h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
 		<span class="block text-indigo-600">{$_('page.home.title')}</span>
 		<p>
-			<Link class="underline" href="https://appwrite.io/">Appwrite</Link>
+			<Button class="underline" href="https://appwrite.io/">Appwrite</Button>
 		</p>
 		<p>
-			<Link class="underline" href="/oauth">OAuth</Link>
+			<Button class="underline" href="/oauth">OAuth</Button>
 		</p>
 		<p>
-			<Link class="underline" href="https://github.com/lewis-wow/appwrite-svelte-rocket-start">Repository</Link>
+			<Button class="underline" href="https://github.com/lewis-wow/appwrite-svelte-rocket-start">Repository</Button>
 		</p>
 	</h1>
 </div>
