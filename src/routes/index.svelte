@@ -1,6 +1,13 @@
 <script lang="ts">
+	import { user } from '$lib/auth'
 	import { Button } from '$lib/components/Common'
+	import { onMount } from 'svelte'
 	import { _ } from 'svelte-i18n'
+	import { navigate } from '$lib/router'
+
+	onMount(() => {
+		if (!$user) navigate('/oauth')
+	})
 </script>
 
 <div class="flex justify-center mt-20">
