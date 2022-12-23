@@ -10,6 +10,38 @@ CMS ready!
 
 [Appwrite installation](https://appwrite.io/docs/installation)
 
+## Start
+
+### Appwrite cli
+
+```bash
+npm install -g appwrite-cli
+```
+
+### Appwrite new project
+
+```bash
+appwrite init project
+```
+
+### Appwrite new collection
+
+```bash
+appwrite init collection
+```
+
+### Appwrite new function
+
+```bash
+appwrite init function
+```
+
+[Appwrite cli documentation](https://appwrite.io/docs/command-line)
+
+## env
+
+Edit `.env` file for config project id.
+
 ## Frontend included
 
 * tailwind
@@ -205,8 +237,6 @@ Locale file `src/locales/en.json`
 `$root` = `/`
 
 `$src` = `src`
-
-`$cms` = `src/cms`
 
 `$routes` = `src/routes`
 

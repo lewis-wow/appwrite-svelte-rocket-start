@@ -1,8 +1,6 @@
-import { Route, Router, link, links, Link } from 'svelte-routing'
-import { navigate, back, forward } from './router/navigate'
+export { link } from 'svelte-routing'
+export { navigate, back, forward } from './router/navigate'
 import Redirect from "./router/Redirect.svelte"
-import ProtectedRoute from "./router/ProtectedRoute.svelte"
-import LazyRoute from "./router/LazyRoute.svelte"
-import defineRoutes from "./router/routes"
+import Router from "./router/Router.svelte"
 
-export { Route, Router, Link, link, links, navigate, back, forward, Redirect, ProtectedRoute, LazyRoute, defineRoutes }
+export { Redirect, Router }

@@ -1,12 +1,14 @@
 <script lang="ts">
 	import './main.scss'
-	import { i18n, isLoading } from './locales/i18n'
+	import { i18n, isLoading as localeLoading } from '$lib/locales'
+	import { isLoading as authLoading } from '$lib/auth'
 	import { onMount } from 'svelte'
-	import { Router } from '$lib/router'
 
 	import Routes from './__routes.svelte'
 
 	let isMounted = false
+	$: isReady = $localeLoading === false && $authLoading === false && isMounted
+
 	onMount(() => {
 		/** init i18n */
 		i18n()
@@ -22,8 +24,8 @@
 	})
 </script>
 
-<Router>
-	{#if !$isLoading && isMounted}
+<div>
+	{#if isReady}
 		<Routes />
 	{/if}
-</Router>
+</div>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Router from '$lib/router/Router.svelte'
+	import { Router } from '$lib/router'
 
 	import Layout from '$src/__layout.svelte'
 	import Loading from '$src/__loading.svelte'
@@ -14,18 +14,6 @@
 		{
 			path: '/',
 			component: () => import('$routes/index.svelte'),
-		},
-		{
-			path: '/oauth',
-			component: () => import('$routes/oauth/index.svelte'),
-		},
-		{
-			path: '/oauth/failure',
-			component: () => import('$routes/oauth/failure.svelte'),
-		},
-		{
-			path: '/oauth/success',
-			component: () => import('$routes/oauth/success.svelte'),
 		},
 	]}
 />

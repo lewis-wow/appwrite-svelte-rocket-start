@@ -1,8 +1,10 @@
 import { writable } from 'svelte/store'
-import { databases, client } from './appwrite'
-import { Models, Query, RealtimeResponseEvent } from 'appwrite'
+import { client } from './appwrite'
+import { Models, Query, RealtimeResponseEvent, Databases } from 'appwrite'
 import { ID } from 'appwrite'
 import type { Writable } from 'svelte/store'
+
+const databases = new Databases(client)
 
 class Collection {
 	constructor(protected databaseId: string, protected collectionId: string) { }
@@ -190,4 +192,4 @@ class Document {
 	}
 }
 
-export { Collection, Document }
+export { Collection, Document, databases }

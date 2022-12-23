@@ -1,9 +1,10 @@
-import type { Models, RealtimeResponseEvent } from 'appwrite'
+import { Models, RealtimeResponseEvent, Account } from 'appwrite'
 import { writable } from 'svelte/store'
-import { account, client } from './appwrite'
+import { client } from './appwrite'
 
+const account = new Account(client)
 const userStore = writable<Models.Account<Models.Preferences>>(null)
-const loadingStore = writable(true)
+const isLoadingStore = writable(true)
 
 client.subscribe('account', (response: RealtimeResponseEvent<any>) => {
 	if (response.events.includes('users.*.sessions.*.delete')) {
@@ -13,19 +14,18 @@ client.subscribe('account', (response: RealtimeResponseEvent<any>) => {
 	if (response.events.includes('users.*.sessions.*.update')) {
 		return userStore.set(response.payload)
 	}
+
+	if (response.events.includes('users.*.sessions.*.create')) {
+		return account.get().then(data => userStore.set(data))
+	}
 })
 
 account.get().then(data => {
 	userStore.set(data)
-	loadingStore.set(false)
-})
+	isLoadingStore.set(false)
+}).catch(() => isLoadingStore.set(false))
 
-const user = {
-	subscribe: userStore.subscribe,
-	logout: () => account.deleteSession('current'),
-	account: account
-}
-
-const isLoading = { subscribe: loadingStore.subscribe }
+const isLoading = { subscribe: isLoadingStore.subscribe }
+const user = { subscribe: userStore.subscribe }
 
 export { account, user, isLoading }

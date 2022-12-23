@@ -1,6 +1,8 @@
-import { storage, client } from './appwrite'
-import { ID, Models, RealtimeResponseEvent } from 'appwrite'
+import { client } from './appwrite'
+import { ID, Models, RealtimeResponseEvent, Storage } from 'appwrite'
 import { Writable, writable } from 'svelte/store'
+
+const storage = new Storage(client)
 
 class Bucket {
 	constructor(protected bucketId: string) { }
@@ -204,4 +206,4 @@ class File {
 	}
 }
 
-export { Bucket, File }
+export { Bucket, File, storage }

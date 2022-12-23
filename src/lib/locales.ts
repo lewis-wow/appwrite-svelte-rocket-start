@@ -1,5 +1,5 @@
 import { register, init, getLocaleFromNavigator, isLoading, locale, locales } from 'svelte-i18n'
-import registers from './languages'
+import registers from './locales/languages'
 
 Object.entries(registers).forEach(([key, file]) => register(key, file))
 
