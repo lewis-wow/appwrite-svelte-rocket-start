@@ -130,7 +130,15 @@ class Bucket {
 }
 
 class File {
-	constructor(protected bucketId: string, protected fileId: string) { }
+	protected bucketId: string
+	protected fileId: string
+
+	constructor(bucketId: string, fileId: string)
+	constructor(file: Models.File)
+	constructor(bucketId: string | Models.File, fileId?: string) {
+		this.bucketId = typeof bucketId === 'string' ? bucketId : bucketId.bucketId
+		this.fileId = typeof bucketId === 'string' ? fileId : bucketId.$id
+	}
 
 	createSubscriber() {
 		const fileStore = writable<Models.File>(null)
@@ -177,9 +185,22 @@ class File {
 	}
 
 	async getContent() {
-		const { href } = await storage.getFileView(this.bucketId, this.fileId)
+		const fileContent = writable('')
+		const loading = writable(true)
 
-		return await fetch(href)
+		const { href } = storage.getFileView(this.bucketId, this.fileId)
+
+		fetch(href).then(res => res.ok ? res.text() : null).then(res => {
+			fileContent.set(res ?? '')
+			loading.set(false)
+		})
+
+		return [{ subscribe: fileContent.subscribe }, { subscribe: loading.subscribe }] as const
+	}
+
+	static async create(bucketId: string, file, permissions: string[] = []) {
+		const created = await storage.createFile(bucketId, ID.unique(), file, permissions)
+		return new File(created)
 	}
 }
 

@@ -138,7 +138,17 @@ class Collection {
 }
 
 class Document {
-	constructor(protected databaseId: string, protected collectionId: string, protected documentId: string) { }
+	protected databaseId: string
+	protected collectionId: string
+	protected documentId: string
+
+	constructor(databaseId: string, collectionId: string, documentId: string)
+	constructor(document: Models.Document)
+	constructor(databaseId: string | Models.Document, collectionId?: string, documentId?: string) {
+		this.databaseId = typeof databaseId === 'string' ? databaseId : databaseId.$database
+		this.collectionId = typeof databaseId === 'string' ? collectionId : databaseId.$collection
+		this.documentId = typeof databaseId === 'string' ? documentId : databaseId.$id
+	}
 
 	createSubscriber() {
 		const dataStore = writable<Models.Document>(null)
@@ -172,6 +182,11 @@ class Document {
 		if (permissions.length === 0 && Object.keys(data).length === 0) return
 
 		return databases.updateDocument(this.databaseId, this.collectionId, this.documentId, data, permissions)
+	}
+
+	static async create(databaseId: string, collectionId: string, data: { [key: string]: any } = {}, permissions: string[] = []) {
+		const created = await databases.createDocument(databaseId, collectionId, ID.unique(), data, permissions)
+		return new Document(created)
 	}
 }
 
