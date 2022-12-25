@@ -64,7 +64,7 @@ Edit `.env` file for config project id.
 * vite
 * prettier
 * editorconfig
-* icons: [Bootstrap icons](https://icons.getbootstrap.com/)
+* icons: [Feather icons](https://feathericons.com/)
 
 ## Database subscribers
 
