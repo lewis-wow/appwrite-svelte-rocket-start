@@ -10,10 +10,11 @@
 	export let before: (() => any) | null = null
 
 	let loadedComponent = null
-	const __before = async () => (before ? await before() : null)
 
-	onMount(() => {
-		__before()
+	onMount(async () => {
+		if (before !== null) {
+			await before()
+		}
 
 		if (component instanceof SvelteComponent) {
 			loadedComponent = component

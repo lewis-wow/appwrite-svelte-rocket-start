@@ -70,16 +70,32 @@ Edit `.env` file for config project id.
 
 ```svelte
 <script>
-  import { Collection } from '$lib/database'
+  import { Collection } from '$lib/appwrite'
   import { Query } from 'appwrite'
 
   const collection = new Collection('[database-id]', '[collection-id]')
-  const [subscriber, loading] = collection.createSubscriber([Query.limit(5) /*, ...queries */])
+  const [subscriber, loading] = collection.listDocuments(/* filters?: string[], offset?: number, limit?: number, orderType?: "ASC" | "DESC" */)
   // listen changes (update, delete) in database and automatically rerender on change
   // current data = [{ name: 'John', lastName: 'Doe' }, ...]
 
-  const insertSubscriber = collection.createObserver()
-  // listen changes (create) in database and automatically rerender on change
+  const [documentSubscriber, documentLoading] = collection.getDocument('[document-id]')
+  const [documentSubscriber, documentLoading] = collection.getDocument([Query.equal('name', 'John'), /*...*/])
+  // must be unique in collection, else throw error
+
+  const insertSubscriber = collection.listenInsert((item) => item.name !== 'John')
+  // listen changes (create/instert) in database and automatically rerender on change
+  // can be created with filter function
+
+  collection.createDocument({ name: 'John', lastname: 'Doe' }, [/* ...permissions */])
+  // creates a document in collection with data and permissions
+
+  collection.deleteDocument('[document-id]')
+  collection.deleteDocument($documentSubscriber)
+  // delete a document from collection by id or by the document
+
+  collection.updateDocument('[document-id]', { name: 'John', lastname: 'Doe' }, [/* ...permissions */])
+  collection.updateDocument($documentSubscriber, { name: 'John', lastname: 'Doe' }, [/* ...permissions */])
+  // update a document from collection by id or by the document
 
   const [paginator, paginatorInitalLoading] = collection.createPaginate(10, [/* ...queries */])
   // paginate the collection of documents with limit and automatically rerender on change
@@ -112,7 +128,7 @@ Edit `.env` file for config project id.
 
 ```svelte
 <script>
-  import { Bucket } from '$lib/storage'
+  import { Bucket } from '$lib/appwrite'
   import { Query } from 'appwrite'
 
   const bucket = new Bucket('[bucket-id]')
@@ -182,17 +198,20 @@ Routes can be added in `__routes.svelte` file. Every route is fetched lazyly.
 
 `__routes.svelte` the file includes all routes in application
 
-## Social auth
+## auth/user
 
 ```svelte
 <script>
-  import { account, url } from '$lib/stores/appwrite'
+  import { user } from '$lib/appwrite'
 </script>
 
 <div>
-  <button on:click={() => account.createOAuth2Session('github', url.oauth.success, url.oauth.failure)}>
-    Github
-  </button>
+  {#if $user}
+    user: {$user.name}
+    <button on:click={() => user.destroySession('current')}>Logout</button>
+  {:else}
+      <button on:click={() => user.createEmailSession('[email]', '[password]')}>Login</button>
+  {/if}
 </div>
 ```
 

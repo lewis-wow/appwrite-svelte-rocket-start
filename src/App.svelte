@@ -25,6 +25,7 @@
 </script>
 
 <div>
+	<!-- you can display loading while app is not ready (waiting for user and i18n) -->
 	{#if isReady}
 		<Routes />
 	{/if}

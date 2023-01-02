@@ -2,6 +2,8 @@ import { Client, Teams, Functions, Locale, Avatars, Graphql, Account, Storage, D
 import { createAuthDispatcher, createBucketDispatcher, createCollectionDispatcher } from 'svelte-appwrite-client';
 
 const client = new Client()
+client.setEndpoint(import.meta.env.VITE_APPWRITE_ENDPOINT).setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID)
+
 const teams = new Teams(client)
 const functions = new Functions(client)
 const locale = new Locale(client)
@@ -17,8 +19,6 @@ const Collection = createCollectionDispatcher(databases)
 
 const user = new Auth()
 const isLoading = user.isLoading
-
-client.setEndpoint(import.meta.env.VITE_APPWRITE_ENDPOINT).setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID)
 
 export default client
 export { client, teams, functions, locale, avatars, graphql, account, databases, storage, Bucket, Collection, user, isLoading }
