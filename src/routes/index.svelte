@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { account, user } from '$lib/auth'
+	import { user } from '$lib/appwrite'
 	import { Button } from '$lib/components/Common'
-	import { ID } from 'appwrite'
 	import { _ } from 'svelte-i18n'
 </script>
 
@@ -20,7 +19,7 @@
 		{#if $user}
 			<div>
 				<p>
-					<Button class="underline" on:click={() => account.deleteSession('current')}>Logout</Button>
+					<Button class="underline" on:click={() => user.deleteSession('current')}>Logout</Button>
 				</p>
 
 				<p>
@@ -31,10 +30,10 @@
 		{:else}
 			<div>
 				<p>
-					<Button class="underline" on:click={() => account.create(ID.unique(), 'example@example.com', 'password')}>Register</Button>
+					<Button class="underline" on:click={() => user.createAccount('example@example.com', 'password')}>Register</Button>
 				</p>
 				<p>
-					<Button class="underline" on:click={() => account.createEmailSession('example@example.com', 'password')}>Login</Button>
+					<Button class="underline" on:click={() => user.createEmailSession('example@example.com', 'password')}>Login</Button>
 				</p>
 			</div>
 		{/if}

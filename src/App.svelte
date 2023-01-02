@@ -1,7 +1,7 @@
 <script lang="ts">
 	import './main.scss'
 	import { i18n, isLoading as localeLoading } from '$lib/locales'
-	import { isLoading as authLoading } from '$lib/auth'
+	import { isLoading as authLoading } from '$lib/appwrite'
 	import { onMount } from 'svelte'
 
 	import Routes from './__routes.svelte'
